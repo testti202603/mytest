@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desert imagery test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .section-title {
+            color: #2196F3;
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .progress {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .question-container {
+            display: none;
+            margin-bottom: 30px;
+            min-height: 600px;
+            padding: 30px;
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question-container.with-bg {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 30px;
+            min-height: 600px;
+        }
+        
+        .question-container.with-bg .bg-image {
+            flex: 2;
+            min-height: 600px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background-color: #f5f5f5;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-container.with-bg .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 400px;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        
+        .question-container.with-bg .section-title,
+        .question-container.with-bg .main-question-title,
+        .question-container.with-bg .sub-question {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .question-container.with-bg .option-btn {
+            background-color: white;
+            border: 2px solid #2196F3;
+            color: #2196F3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        
+        .question-container.with-bg .option-btn:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .question-container.with-bg .option-btn.selected {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .question-img {
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+            border-radius: 8px;
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .main-question-title {
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .sub-question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .sub-question-title {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .option-btn {
+            padding: 12px 25px;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            background-color: white;
+            color: #2196F3;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto !important;
+        }
+        
+        .option-btn:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .option-btn.selected {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #1976D2;
+        }
+        
+        .nav-btns {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #1976D2;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .error {
+            color: #f44336;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        #result-page {
+            display: none;
+        }
+        
+        .result-summary {
+            font-size: 20px;
+            color: #333;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .result-item {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .result-question-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .result-img {
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px auto;
+            display: block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .answer-info {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .final-answer {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff3e0;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .final-answer h2 {
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+        
+        .final-answer-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+            word-wrap: break-word;
+        }
+        
+        .back-btn {
+            background-color: #607D8B;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-page" class="container">
+        <h1>Desert imagery test</h1>
+        <div class="progress">Question 1/24</div>
+        <div class="error" id="error-msg">Please complete all questions before continuing!</div>
+
+        <div id="questions-container"></div>
+
+        <div class="nav-btns">
+            <button id="prev-btn" disabled>Last question</button>
+            <button id="next-btn">Next question</button>
+            <button id="submit-btn" style="display: inline-block;">Test result </button>
+        </div>
+    </div>
+
+    <div id="result-page" class="container">
+        <h1>Test result</h1>
+        <div class="result-summary" id="result-summary">You have completed a total of 24 questions, and here is your answer record</div>
+        <div id="result-list"></div>
+        <div class="final-answer" id="final-answer" style="display: none;">
+            <h2>Final answer concatenation</h2>
+            <div class="final-answer-content" id="final-answer-content"></div>
+        </div>
+        <button class="back-btn" id="back-btn">Restart test</button>
+    </div>
+
+    <script>
+        const totalQuestions = 24;
+        let currentQuestion = 1;
+        let userAnswers = {};
+        let visibleQuestions = [];
+
+        const questionsData = [
+            { 
+                id: 1, 
+                section: 'I. The Cube',
+                img: 'img2/1.png',
+                type: 'choice',
+                question: 'How big is this cube you can see?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Very small (e.g. a fist, a ball)', meaning: 'You have a low sense of self-worth and may lack confidence' },
+                        { text: 'B. Medium-sized (e.g. a suitcase, a car)', meaning: 'You have a moderate sense of self-worth and are fairly well-balanced' },
+                        { text: 'C. Very large (e.g. a house, a skyscraper)', meaning: 'You have a strong sense of self-worth and are quite confident' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 2, 
+                section: 'I. The Cube',
+                img: 'img2/2.png',
+                type: 'choice',
+                question: 'What is it made of?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Metal/glass (cold, hard)', meaning: 'You are principled, unyielding and may come across as somewhat cold' },
+                        { text: 'B. Wood/soft (natural, warm)', meaning: 'You are natural and gentle, and willing to adapt' },
+                        { text: 'C. Stone/concrete (heavy, solid)', meaning: 'Steady and down-to-earth; not easily swayed' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 3, 
+                section: 'I. The Cube',
+                img: 'img2/3.png',
+                type: 'choice',
+                question: 'Does it look sturdy?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Very sturdy, almost indestructible', meaning: 'You feel you have a strong ability to cope with pressure' },
+                        { text: 'B. Moderately sturdy; excessive force might break it', meaning: 'You feel you can cope, but don\'t push it too far' },
+                        { text: 'C. Not sturdy; easily damaged', meaning: 'You feel you are quite vulnerable' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 4, 
+                section: 'I. The Cube',
+                img: 'img2/3.png',
+                type: 'choice',
+                question: 'Is it solid or hollow?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Solid', meaning: 'More focused on your inner world' },
+                        { text: 'B. Hollow', meaning: 'More easily influenced by external factors' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 5, 
+                section: 'I. The Cube',
+                img: 'img2/3.png',
+                type: 'choice',
+                question: 'Where is it?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Floating in air', meaning: 'You have a rather unconventional way of thinking and believe the future is full of uncertainties' },
+                        { text: 'B. Placed on ground', meaning: 'You are quite pragmatic and have a rough idea of where you are heading' },
+                        { text: 'C. Partially buried in sand', meaning: 'You are organised and take things step by step, but you are not very adaptable' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 6, 
+                section: 'II. The Ladder',
+                img: 'img2/6.jpg',
+                type: 'choice',
+                question: 'What is the position of ladder in relation to the cube?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Leaning against cube', meaning: 'You feel a sense of security and trust from your family and friends' },
+                        { text: 'B. Very close to cube, but not leaning against it', meaning: 'You have a good relationship with your family and friends, but you do not yet rely on them completely' },
+                        { text: 'C. A long way from cube', meaning: 'Feels that those around you cannot provide stable support; relies on yourself for everything' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 7, 
+                section: 'II. The Ladder',
+                img: 'img2/7.png',
+                type: 'choice',
+                question: 'What is the ladder made of?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Metal', meaning: 'Feels that this support is solid and reliable' },
+                        { text: 'B. Wood', meaning: 'Feels that the support is substantial, but not indestructible' },
+                        { text: 'C. Rope/a rope ladder', meaning: 'You feel the support is somewhat unstable and precarious' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 8, 
+                section: 'II. The Ladder',
+                img: 'img2/8.png',
+                type: 'choice',
+                question: 'Where do you think this ladder leads?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. To a specific place (e.g. sky, top of cube)', meaning: 'You feel that family and friends can help you achieve concrete goals' },
+                        { text: 'B. It feels as though it could lead anywhere', meaning: 'You feel they support you in everything' },
+                        { text: 'C. Nowhere', meaning: 'You feel they are of little help' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 9, 
+                section: 'III. Horses',
+                img: 'img2/9.png',
+                type: 'choice',
+                question: 'How many horses did you see?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. One', meaning: 'You tend to favour a monogamous relationship' },
+                        { text: 'B. Two or three', meaning: 'You may still be weighing your options, or you hope your partner possesses a variety of qualities' },
+                        { text: 'C. A herd', meaning: 'You yearn for freedom and do not wish to be tied down' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 10, 
+                section: 'III. Horses',
+                img: 'img2/9.png',
+                type: 'choice',
+                dependsOn: 9,
+                question: 'What is the horse\'s build?',
+                subQuestions: [{ id: 1, options: ['A', 'B', 'C', 'D', 'E'] }] 
+            },
+            { 
+                id: 11, 
+                section: 'III. Horses',
+                img: 'img2/11.png',
+                type: 'choice',
+                question: 'What is the horse\'s state?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Standing quietly/resting', meaning: 'You hope your partner is stable and down-to-earth' },
+                        { text: 'B. Strolling leisurely/grazing', meaning: 'You hope the relationship is relaxed and natural' },
+                        { text: 'C. Running', meaning: 'You hope your partner is energetic and driven' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 12, 
+                section: 'III. Horses',
+                img: 'img2/11.png',
+                type: 'choice',
+                question: 'Does the horse have reins or a saddle?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Yes, fully equipped', meaning: 'You like to feel in control and derive a sense of security from your partner' },
+                        { text: 'B. Yes, but very little/very simple', meaning: 'You have a slight desire for control, but not excessively so' },
+                        { text: 'C. No, it is a wild horse', meaning: 'You find your partner unpredictable, or you yearn for a free-spirited relationship' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 13, 
+                section: 'III. Horses',
+                img: 'img2/11.png',
+                type: 'choice',
+                question: 'Why do you think the horse is here?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Someone rode it here', meaning: 'You feel your partner has a sense of belonging and isn\'t just a passing presence' },
+                        { text: 'B. It is a wild horse that lives here naturally', meaning: 'You see your partner as a free-spirited individual' },
+                        { text: 'C. I don\'t know; it just appeared out of the blue', meaning: 'You haven\'t yet made up your mind about the relationship' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 14, 
+                section: 'V. Flowers (Optional)',
+                img: 'img2/14.png',
+                type: 'choice',
+                question: 'Are there any flowers in your picture?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Yes', meaning: 'You want children or a pet' },
+                        { text: 'B. No (Skip to next section)', meaning: 'You may not want children or a pet' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 15, 
+                section: 'V. Flowers (Optional)',
+                img: 'img2/15.png',
+                type: 'choice',
+                question: 'Where are the flowers?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Next to/around cube', meaning: 'Hope the child will be close to you' },
+                        { text: 'B. Next to/around ladder', meaning: 'Hope the child will be close to the family' },
+                        { text: 'C. Next to/around horse', meaning: 'Hope the child will be close to your partner' },
+                        { text: 'D. Scattered throughout', meaning: 'Take the relationship with the child as it comes; don\'t force it' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 16, 
+                section: 'V. Flowers (Optional)',
+                img: 'img2/15.png',
+                type: 'choice',
+                question: 'How many flowers are there?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. One', meaning: 'Want one' },
+                        { text: 'B. Two clusters', meaning: 'Want around two' },
+                        { text: 'C. A large patch', meaning: 'Want several, or particularly love children' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 17, 
+                section: 'V. Flowers (Optional)',
+                img: 'img2/17.png',
+                type: 'choice',
+                question: 'How are the flowers looking?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Lush and vibrant', meaning: 'Have high expectations for the child' },
+                        { text: 'B. Simple and delicate', meaning: 'No particular demands; just want them to be healthy and happy' },
+                        { text: 'C. Half-open, half-wilted', meaning: 'You may have some worries or anxieties' },
+                        { text: 'D. About to wither', meaning: 'You may have some worries or anxieties' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 18, 
+                section: 'V. Flowers (Optional)',
+                img: 'img2/18.jpg',
+                type: 'choice',
+                question: 'If they have colour, what colour are the flowers?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Warm colours (red, orange, yellow)', meaning: 'You hope your child will be lively and cheerful' },
+                        { text: 'B. Cool colours (blue, purple)', meaning: 'You hope your child will be calm and quiet' },
+                        { text: 'C. White/light colours', meaning: 'You hope your child will be pure and innocent' },
+                        { text: 'D. Mixed colours', meaning: 'You hope your child\'s life will be rich and varied' },
+                        { text: 'E. Green', meaning: '' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 19, 
+                section: 'V. Flowers (Optional)',
+                img: 'img2/19.jpg',
+                type: 'choice',
+                question: 'Is there grass? If not, you may skip this; if so, please select shape of grass',
+                subQuestions: [{ id: 1, options: ['A', 'B', 'C', 'D', 'E'] }] 
+            },
+            { 
+                id: 20, 
+                section: 'V. Environment and Storms',
+                img: 'img2/20.png',
+                type: 'choice',
+                question: 'What is the weather like in the desert?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Sunny, with sun beating down', meaning: 'Life is fairly carefree at the moment' },
+                        { text: 'B. Overcast, calm and windless', meaning: 'Things are okay; no major upsets' },
+                        { text: 'C. There is a sandstorm, but it is not severe', meaning: 'Feeling a bit of pressure recently' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 21, 
+                section: 'V. Environment and Storms',
+                img: 'img2/21.png',
+                type: 'choice',
+                question: 'Can you see storm?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. Yes, it is approaching', meaning: 'Feeling that trouble is on the way' },
+                        { text: 'B. Yes, but it is far away and does not seem to be coming this way', meaning: 'I know there\'s a problem, but I don\'t think it will affect me' },
+                        { text: 'C. Yes, it is moving away', meaning: 'The problem is passing' },
+                        { text: 'D. There is no storm', meaning: 'No worries at the moment' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 22, 
+                section: 'V. Environment and Storms',
+                img: 'img2/22.png',
+                type: 'choice',
+                question: 'Select the shape of storm',
+                subQuestions: [{ id: 1, options: ['A', 'B', 'C', 'D', 'E'] }] 
+            },
+            { 
+                id: 23, 
+                section: 'V. Environment and Storms',
+                img: 'img2/23.png',
+                type: 'choice',
+                question: 'If the storm were to hit, what do you think would happen to objects in the picture?',
+                subQuestions: [{ 
+                    id: 1, 
+                    options: [
+                        { text: 'A. They would be completely destroyed or buried', meaning: 'I feel I won\'t be able to cope when the problem hits' },
+                        { text: 'B. They would be affected to some extent, but would not disappear', meaning: 'I feel I can get through it, but it will leave some scars' },
+                        { text: 'C. They would be virtually unaffected', meaning: 'I feel I have strong resilience' }
+                    ] 
+                }] 
+            },
+            { 
+                id: 24, 
+                section: 'V. Environment and Storms',
+                img: 'img2/24.png',
+                type: 'choice',
+                question: 'Please select a sand dune for your picture',
+                subQuestions: [{ id: 1, options: ['A', 'B', 'C', 'D', 'E'] }] 
+            }
+        ];
+
+        const answerImages = [
+            'img3/2026-03-20 162429.png',
+            'img3/2026-03-20 162453.png',
+            'img3/2026-03-20 162640.png',
+            'img3/2026-03-20 162745.png',
+            'img3/2026-03-20 162750.png',
+            'img3/2026-03-20 162838.png',
+            'img3/2026-03-20 162844.png',
+            'img3/2026-03-20 162907.png',
+            'img3/2026-03-20 162927.png',
+            'img3/2026-03-20 162944.png',
+            'img3/2026-03-20 163003.png',
+            'img3/2026-03-20 163021.png',
+            'img3/2026-03-20 163042.png',
+            'img3/2026-03-20 163103.png',
+            'img3/2026-03-20 163123.png',
+            'img3/2026-03-20 163143.png',
+            'img3/2026-03-20 163204.png',
+            'img3/2026-03-20 163227.png',
+            'img3/2026-03-20 163247.png',
+            'img3/2026-03-20 163309.png',
+            'img3/2026-03-20 163330.png',
+            'img3/2026-03-20 163347.png',
+            'img3/2026-03-20 163406.png',
+            'img3/2026-03-20 163440.png'
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initQuestions();
+            initAnswerStorage();
+            bindOptionClicks();
+            bindNavButtons();
+        });
+
+        function initQuestions() {
+            const container = document.getElementById('questions-container');
+            visibleQuestions = questionsData;
+            
+            visibleQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.setAttribute('data-question-id', q.id);
+                
+                let html = '';
+                if (q.img) {
+                    questionDiv.classList.add('with-bg');
+                    html += `<div class="bg-image" style="background-image: url('${q.img}')"></div>`;
+                    html += `<div class="content-area">`;
+                }
+                
+                if (q.section && (index === 0 || questionsData[index - 1].section !== q.section)) {
+                    html += `<div class="section-title">${q.section}</div>`;
+                }
+                html += `<p class="main-question-title">${q.id}. ${q.question}</p>`;
+                
+                q.subQuestions.forEach((sub, subIndex) => {
+                    html += `<div class="sub-question">`;
+                    if (q.type === 'text') {
+                        html += `<input type="text" class="text-input" data-question-id="${q.id}" data-sub-id="${sub.id}" placeholder="${sub.placeholder}">`;
+                    } else {
+                        html += `<div class="options">`;
+                        sub.options.forEach(opt => {
+                            const optionText = typeof opt === 'object' ? opt.text : opt;
+                            html += `<button class="option-btn" data-question-id="${q.id}" data-sub-id="${sub.id}">${optionText}</button>`;
+                        });
+                        html += `</div>`;
+                    }
+                    html += `</div>`;
+                });
+                
+                if (q.img) {
+                    html += `</div>`;
+                }
+                
+                questionDiv.innerHTML = html;
+                container.appendChild(questionDiv);
+            });
+            
+            document.querySelector('.question-container[data-question-id="1"]').classList.add('active');
+        }
+
+        function initAnswerStorage() {
+            for (let i = 1; i <= totalQuestions; i++) {
+                userAnswers[i] = {};
+                const question = questionsData.find(q => q.id === i);
+                if (question) {
+                    question.subQuestions.forEach(sub => {
+                        userAnswers[i][sub.id] = '';
+                    });
+                }
+            }
+        }
+
+        function bindOptionClicks() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('option-btn')) {
+                    const qId = parseInt(e.target.getAttribute('data-question-id'));
+                    const subId = e.target.getAttribute('data-sub-id');
+                    
+                    const sameSubOptions = document.querySelectorAll(`.option-btn[data-question-id="${qId}"][data-sub-id="${subId}"]`);
+                    sameSubOptions.forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    e.target.classList.add('selected');
+                    userAnswers[qId][subId] = e.target.textContent;
+                    document.getElementById('error-msg').style.display = 'none';
+                    
+                    updateDependentQuestions(qId);
+                }
+            });
+
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('text-input')) {
+                    const qId = parseInt(e.target.getAttribute('data-question-id'));
+                    const subId = e.target.getAttribute('data-sub-id');
+                    userAnswers[qId][subId] = e.target.value;
+                    document.getElementById('error-msg').style.display = 'none';
+                    
+                    updateDependentQuestions(qId);
+                }
+            });
+        }
+
+        function updateDependentQuestions(qId) {
+            const dependentQuestions = questionsData.filter(q => q.dependsOn === qId);
+            dependentQuestions.forEach(q => {
+                const questionDiv = document.querySelector(`.question-container[data-question-id="${q.id}"]`);
+                if (questionDiv) {
+                    const optionsContainer = questionDiv.querySelector('.options');
+                    if (optionsContainer) {
+                        const answer = userAnswers[qId][1];
+                        if (answer) {
+                            updateQuestionOptions(q.id, answer);
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateQuestionOptions(qId, previousAnswer) {
+            const question = questionsData.find(q => q.id === qId);
+            if (!question) return;
+            
+            let newOptions = [];
+            switch(qId) {
+                case 10:
+                    if (previousAnswer.includes('One')) {
+                        newOptions = ['A', 'B', 'C', 'D', 'E'];
+                    } else if (previousAnswer.includes('Two or three')) {
+                        newOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+                    } else if (previousAnswer.includes('herd')) {
+                        newOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+                    }
+                    break;
+                default:
+                    newOptions = question.subQuestions[0].options;
+            }
+            
+            if (newOptions.length > 0) {
+                const optionsContainer = document.querySelector(`.question-container[data-question-id="${qId}"] .options`);
+                if (optionsContainer) {
+                    optionsContainer.innerHTML = '';
+                    newOptions.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'option-btn';
+                        btn.setAttribute('data-question-id', qId);
+                        btn.setAttribute('data-sub-id', 1);
+                        const optionText = typeof opt === 'object' ? opt.text : opt;
+                        btn.textContent = optionText;
+                        optionsContainer.appendChild(btn);
+                    });
+                    
+                    question.subQuestions[0].options = newOptions;
+                }
+            }
+        }
+
+        function bindNavButtons() {
+            document.getElementById('next-btn').addEventListener('click', function() {
+                if (!checkAllSubQuestionsAnswered(currentQuestion)) {
+                    document.getElementById('error-msg').style.display = 'block';
+                    return;
+                }
+                document.getElementById('error-msg').style.display = 'none';
+                goToNextQuestion();
+            });
+
+            document.getElementById('prev-btn').addEventListener('click', goToPrevQuestion);
+
+            document.getElementById('submit-btn').addEventListener('click', function() {
+                if (!checkAllQuestionsAnswered()) {
+                    document.getElementById('error-msg').textContent = 'Please complete all questions before submitting!';
+                    document.getElementById('error-msg').style.display = 'block';
+                    return;
+                }
+                document.getElementById('error-msg').style.display = 'none';
+                showResult();
+            });
+
+            document.getElementById('back-btn').addEventListener('click', resetQuiz);
+        }
+
+        function checkAllSubQuestionsAnswered(qId) {
+            const subAnswers = userAnswers[qId];
+            for (const subId in subAnswers) {
+                if (!subAnswers[subId] || subAnswers[subId].trim() === '') {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function checkAllQuestionsAnswered() {
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (!checkAllSubQuestionsAnswered(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function goToNextQuestion() {
+            document.querySelector(`.question-container[data-question-id="${currentQuestion}"]`).classList.remove('active');
+            currentQuestion++;
+            document.querySelector(`.question-container[data-question-id="${currentQuestion}"]`).classList.add('active');
+            restoreSelectedAnswers(currentQuestion);
+            updateProgressText();
+            updateNavButtonStatus();
+        }
+
+        function goToPrevQuestion() {
+            document.querySelector(`.question-container[data-question-id="${currentQuestion}"]`).classList.remove('active');
+            currentQuestion--;
+            document.querySelector(`.question-container[data-question-id="${currentQuestion}"]`).classList.add('active');
+            restoreSelectedAnswers(currentQuestion);
+            updateProgressText();
+            updateNavButtonStatus();
+        }
+
+        function restoreSelectedAnswers(qId) {
+            const subAnswers = userAnswers[qId];
+            for (const subId in subAnswers) {
+                const answerText = subAnswers[subId];
+                if (!answerText) continue;
+                
+                const targetBtn = Array.from(document.querySelectorAll(`.option-btn[data-question-id="${qId}"][data-sub-id="${subId}"]`)).find(btn => {
+                    return btn.textContent === answerText;
+                });
+                if (targetBtn) {
+                    targetBtn.classList.add('selected');
+                }
+                
+                const targetInput = document.querySelector(`.text-input[data-question-id="${qId}"][data-sub-id="${subId}"]`);
+                if (targetInput) {
+                    targetInput.value = answerText;
+                }
+            }
+        }
+
+        function updateProgressText() {
+            document.querySelector('.progress').textContent = `Question ${currentQuestion}/${totalQuestions}`;
+        }
+
+        function updateNavButtonStatus() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+
+            prevBtn.disabled = currentQuestion === 1;
+
+            if (currentQuestion === totalQuestions) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-page').style.display = 'none';
+            document.getElementById('result-page').style.display = 'block';
+
+            const resultList = document.getElementById('result-list');
+            resultList.innerHTML = '';
+
+            let finalAnswerText = '';
+
+            questionsData.forEach((q, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                
+                let html = `<div class="result-question-title">${q.id}. ${q.question}</div>`;
+                if (q.img) {
+                    html += `<img src="${q.img}" alt="Question ${q.id} image" class="result-img">`;
+                }
+                
+                let answerText = '<div class="answer-info"><strong>Your answer:</strong><br>';
+                q.subQuestions.forEach((sub, subIndex) => {
+                    const answer = userAnswers[q.id][sub.id];
+                    answerText += `${answer}<br>`;
+                    finalAnswerText += `${answer},`;
+                    
+                    const selectedOption = sub.options.find(opt => {
+                        const optionText = typeof opt === 'object' ? opt.text : opt;
+                        return optionText === answer;
+                    });
+                    
+                    if (selectedOption && typeof selectedOption === 'object' && selectedOption.meaning) {
+                        answerText += `<div style="margin-top: 10px; padding: 10px; background-color: #e8f5e9; border-radius: 5px; border-left: 4px solid #4caf50;"><strong>Psychological explanation:</strong>${selectedOption.meaning}</div>`;
+                    }
+                });
+                answerText += '</div>';
+                
+                html += answerText;
+                
+                if (index < answerImages.length) {
+                    html += `<div style="margin-top: 20px; padding: 15px; background-color: #fff3e0; border-radius: 5px; border-left: 4px solid #ff9800;">`;
+                    html += `<strong>Reference answer:</strong><br>`;
+                    html += `<img src="${answerImages[index]}" alt="Answer to Question ${q.id}" class="result-img" style="margin-top: 10px;">`;
+                    html += `</div>`;
+                }
+                
+                resultItem.innerHTML = html;
+                resultList.appendChild(resultItem);
+            });
+
+            finalAnswerText = finalAnswerText.slice(0, -1);
+            document.getElementById('final-answer').style.display = 'block';
+            document.getElementById('final-answer-content').textContent = finalAnswerText;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 1;
+            userAnswers = {};
+            initAnswerStorage();
+            
+            document.getElementById('quiz-page').style.display = 'block';
+            document.getElementById('result-page').style.display = 'none';
+            document.getElementById('final-answer').style.display = 'none';
+
+            document.querySelectorAll('.question-container').forEach(container => {
+                container.classList.remove('active');
+                container.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                container.querySelectorAll('.text-input').forEach(input => {
+                    input.value = '';
+                });
+            });
+            document.querySelector('.question-container[data-question-id="1"]').classList.add('active');
+
+            updateProgressText();
+            updateNavButtonStatus();
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('submit-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

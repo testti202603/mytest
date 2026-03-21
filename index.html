@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subconsciousness Test</title>
+    <link rel="stylesheet" href="1.css">
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+        <button class="action-btn btn-1" id="btn1" onclick="window.location.href='1.html'"></button>
+        <button class="action-btn btn-2" id="btn2" onclick="window.location.href='jieshao.html'"></button>
+        <button class="action-btn btn-3" id="btn3" onclick="window.location.href='content.html'"></button>
+        </div>
+    </div>
+    <script>
+        // 获取所有按钮
+        const btn1 = document.getElementById('btn1');
+        const btn2 = document.getElementById('btn2');
+        const btn3 = document.getElementById('btn3');
+        const allBtns = [btn1, btn2, btn3];
+
+        // 核心函数：检测元素是否在可视区
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            // 宽松判定：按钮只要有部分在可视区就可点击（可根据需求调整）
+            return (
+                rect.top <= window.innerHeight && 
+                rect.bottom >= 0
+            );
+        }
+
+        // 批量更新所有按钮状态（复用逻辑）
+        function updateAllBtnStatus() {
+            allBtns.forEach(btn => {
+                if (isElementInViewport(btn)) {
+                    btn.classList.remove('disabled');
+                } else {
+                    btn.classList.add('disabled');
+                }
+            });
+        }
+
+        // 监听滚动/窗口缩放/页面加载，批量更新按钮状态
+        window.addEventListener('scroll', updateAllBtnStatus);
+        window.addEventListener('resize', updateAllBtnStatus);
+        window.addEventListener('load', updateAllBtnStatus);
+
+        // 给每个按钮添加独立点击事件（按需自定义）
+        btn1.addEventListener('click', () => alert('进入测试页面'));
+        btn2.addEventListener('click', () => alert('进入介绍页面'));
+        btn3.addEventListener('click', () => alert('进入图片详情页面'));
+    </script>
+</body>
+</html>

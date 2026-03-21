@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全屏滑动图片展示</title>
+    <style>
+        /* 重置默认样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 确保页面高度充满屏幕 */
+        html, body {
+            height: 100%;
+            overflow: hidden; /* 隐藏默认滚动条 */
+        }
+
+        /* 滑动容器 */
+        .slider-container {
+            height: 100vh; /* 视口高度 */
+            overflow-y: auto; /* 启用垂直滚动 */
+            scroll-snap-type: y mandatory; /* 垂直滚动吸附 */
+            scroll-behavior: smooth; /* 平滑滚动 */
+            background: url('img/2.png') center center no-repeat;
+            background-size: cover;
+        }
+
+        /* 每张图片/文字的容器（统一滚动单元） */
+        .slide {
+            height: 100vh; /* 占满整个屏幕高度 */
+            width: 100vw; /* 占满整个屏幕宽度 */
+            scroll-snap-align: start; /* 滚动吸附到顶部 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+
+        /* 图片样式 */
+        .slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* 完整显示图片，保持比例 */
+        }
+        
+        /* 文字样式 */
+        .centered-text {
+            max-width: 800px; /* 限制最大宽度，避免大屏下文字拉太宽 */
+            margin: 0 auto;   /* 水平居中 */
+            padding: 30px 40px; /* 上下/左右内边距，避免文字贴容器边缘 */
+            background-color: white; /* 白色背景突出文字 */
+            border-radius: 8px; /* 圆角优化视觉 */
+            line-height: 1.6; /* 行高提升可读性 */
+            font-size: 16px;
+            max-height: 90vh; /* 限制文字最大高度，避免溢出 */
+            overflow-y: auto; /* 文字过长时内部滚动 */
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <!-- 第一张图片 -->
+        <div class="slide">
+            <img src="img/3.png" alt="图片1">
+        </div>
+        
+        <!-- 第一个文字区块（包裹到slide中） -->
+        <div class="slide">
+            <div class="centered-text">
+                <p>You have a somewhat low sense of self-worth and may lack confidence. You are naturally gentle and mild-mannered, willing to adapt, and feel that you are quite sensitive. You focus more on your inner world, are methodical and take things step by step, but find it difficult to be flexible.
+You feel that those around you cannot provide stable support, so you rely on yourself for everything. You see support as tangible, but not something that will last forever, and you feel they cannot be of much help.
+You may still be weighing your options, or perhaps you hope your partner will possess a variety of traits. You want your other half to be energetic and driven, yet you find them hard to predict, or perhaps you yearn for a relationship that offers freedom; you haven’t quite sorted out your feelings yet.
+You want children or a pet; your relationship with children is left to fate, without forcing it. You’d like two or so, with no specific requirements—just healthy and happy. You hope your children will be calm and quiet.
+Things are going reasonably well, with no major upsets. You sense trouble is on the horizon, but feel you can weather it, though it will leave some scars.</p>
+            </div>
+        </div>
+
+        <!-- 第二张图片 -->
+        <div class="slide">
+            <img src="img/4.png" alt="图片2">
+        </div>
+        <div class="slide">
+            <div class="centered-text">
+                <p>You have a somewhat low sense of self-worth and may lack confidence. You are principled and resistant to change, and may come across as somewhat aloof. You consider yourself highly resilient under pressure and tend to focus on your inner world. You are methodical and take things step by step, but you are not particularly flexible.
+You feel that those around you cannot provide stable support, so you rely on yourself for everything. You perceive support as somewhat unreliable and precarious, but believe that family and friends can help you achieve specific goals.
+You tend to be committed in relationships, hoping your partner will be energetic and driven. You have a slight desire for control, though not to an excessive degree, and feel that your partner is a source of security rather than a casual acquaintance.
+You would like to have children or a pet, and hope your children will be close to your partner. You would prefer to have just one child, for whom you have high expectations, and hope they will be calm and composed.
+You have been feeling a bit under pressure recently, sensing that problems are on the horizon, and fearing that you might not be able to cope when they arise.</p>
+            </div>
+        </div>
+        <!-- 第三张图片 -->
+        <div class="slide">
+            <img src="img/5.png" alt="图片3">
+        </div>
+        <div class="slide">
+            <div class="centered-text">
+                <p>You have a strong sense of self-worth and are quite confident; you are principled and not easily swayed. You may come across as somewhat aloof, feel that you are easily hurt, and are more susceptible to external influences. Your thinking tends to be unconventional, and you believe the future is full of uncertainty.
+You derive a sense of security and trust from family and friends, though you feel that this support is somewhat unstable and precarious; you believe that family and friends can help you achieve specific goals.
+You may still be weighing your options, or perhaps you’re looking for a partner with a variety of qualities. You hope for a relationship that is relaxed and natural; you like to feel in control, whilst also deriving a sense of security from your partner, whom you see as a free-spirited individual.
+You’d like to have children or a pet; you hope your children will be close to you, and you’d like to have one child, for whom you have high expectations, hoping they’ll be lively and cheerful.
+Things are going reasonably well, with no major upsets; any problems are behind you, and you feel you’re able to cope well with pressure.</p>
+            </div>
+        </div>
+        <!-- 第四张图片 -->
+        <div class="slide">
+            <img src="img/6.png" alt="图片4">
+        </div>
+        
+        <!-- 第二个文字区块（已包裹，保持不变） -->
+        <div class="slide">
+            <div class="centered-text">
+                <p>Your sense of self-worth is moderate and fairly balanced;
+                     you are principled and steadfast, not easily swayed. You may come 
+                     across as somewhat reserved, and whilst you feel capable of handling 
+                     things on your own, you should avoid pushing yourself too hard. 
+                     You tend to focus more on your inner world, are quite pragmatic, 
+                     and have a clear sense of where you’re heading.You have good 
+                     relationships with family and friends, though you do not rely on 
+                     them entirely. You see their support as tangible, yet not 
+                     something that will last forever, and you feel they cannot be 
+                     of much help. You tend towards monogamous relationships and 
+                     hope your partner will be energetic and driven. You have a slight 
+                     desire for control, though not to an excessive degree, and you have 
+                     not yet fully sorted out your feelings regarding relationships. You 
+                     may not want children or pets. Your life is currently relatively 
+                     carefree, but you sense that problems are on the horizon. You 
+                     believe you can weather them, though they will leave some lasting 
+                     marks.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 滚轮滑动优化
+        const container = document.querySelector('.slider-container');
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            // 每次滚动一个视口高度，匹配slide的高度
+            container.scrollBy({
+                top: e.deltaY > 0 ? window.innerHeight : -window.innerHeight,
+                behavior: 'smooth'
+            });
+        }, { passive: false });
+    </script>
+</body>
+</html>
