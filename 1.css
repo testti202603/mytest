@@ -62,8 +62,36 @@ body {
 
 /* 按钮3：自定义宽高 + 位置 */
 .btn-3 {
-    width: 600px;    /* 更小的宽度 */
-    height: 30px;   /* 正方形 */
-    top: 173.5vh;     /* 更靠下的位置 */
-    left: 465px;   /* 靠右对齐 */
+    width: 800px;    /* 更小的宽度 */
+    height: 80px;   /* 正方形 */
+    top: 168vh;     /* 更靠下的位置 */
+    left: 480px;   /* 靠右对齐 */
 }
+.brief-font {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 80px;
+      color: #ffffff;
+      letter-spacing: 4px;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      
+      /* 核心：用CSS变量接收参数，设置默认值（避免无参数时出错） */
+      position: absolute;
+      top: var(--top, 342px);    /* --top是自定义变量，50px是默认值 */
+      left: var(--left, 150px);  /* --left是自定义变量，80px是默认值 */
+    }
+.brief-font1 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 80px;
+      color: #ffffff;
+      letter-spacing: 4px;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      
+      /* 核心：用CSS变量接收参数，设置默认值（避免无参数时出错） */
+      position: absolute;
+      top: var(--top, 540px);    /* --top是自定义变量，50px是默认值 */
+      left: var(--left, 235px);  /* --left是自定义变量，80px是默认值 */
+    }
